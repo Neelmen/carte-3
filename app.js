@@ -9,8 +9,7 @@ const detail = document.getElementById("dish-detail");
 const backButton = document.getElementById("back-button");
 
 /**
- * NOUVEAU : Gère l'affichage du bouton retour de manière centralisée
- * Le bouton s'affiche SI un menu est ouvert OU SI le détail d'un plat est ouvert.
+ * Gère l'affichage du bouton retour de manière centralisée
  */
 function updateBackButton() {
     const isDetailOpen = detail.classList.contains("active");
@@ -43,7 +42,6 @@ async function showCategory(category) {
         btn.classList.toggle("active", btn.getAttribute('data-cat') === category);
     });
 
-    // On met à jour le bouton après avoir changé la catégorie
     updateBackButton();
 
     if (cache[category]) {
@@ -113,7 +111,6 @@ function showDetail(dish) {
                 <h2>${dish.name}</h2>
                 <div style="font-size:1.5rem; color:#c06c4c; font-family:'Cormorant Garamond', serif;">${displayPrice}</div>
                 ${extraContent}
-                <button onclick="closeDetail()" style="margin-top:30px; background:#c06c4c; color:white; border:none; padding:10px 20px; border-radius:4px; cursor:pointer;">Fermer</button>
             </div>
         </div>
     `;
@@ -128,8 +125,6 @@ function closeDetail() {
     detail.classList.remove("active");
     detail.classList.add("hidden");
     document.body.classList.remove("overlay-open");
-    
-    // Crucial : on vérifie si on doit encore afficher le bouton retour
     updateBackButton();
 }
 
@@ -137,10 +132,7 @@ function closeMenuAnimation() {
     currentCategory = null;
     document.getElementById("menu").innerHTML = "";
     document.querySelectorAll("#navigation button").forEach(btn => btn.classList.remove("active"));
-    
-    // On cache le bouton puisque tout est fermé
     updateBackButton();
-    
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -154,7 +146,13 @@ backButton.onclick = () => {
 
 document.addEventListener("DOMContentLoaded", () => {
     const nav = document.getElementById("navigation");
-    const labels = { entree: "Entrées", plat: "Plats", accompagnement: "Garnitures", dessert: "Desserts", boisson: "Boissons" };
+    const labels = { 
+        entree: "Entrées", 
+        plat: "Plats", 
+        accompagnement: "Accompagnements", // Modifié ici
+        dessert: "Desserts", 
+        boisson: "Boissons" 
+    };
     Object.keys(labels).forEach(cat => {
         const btn = document.createElement("button");
         btn.textContent = labels[cat];
@@ -163,6 +161,5 @@ document.addEventListener("DOMContentLoaded", () => {
         nav.appendChild(btn);
     });
     
-    // Au chargement, on s'assure qu'il est caché
     updateBackButton();
 });
