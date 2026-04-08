@@ -8,6 +8,21 @@ let currentCategory = null;
 const detail = document.getElementById("dish-detail");
 const backButton = document.getElementById("back-button");
 
+/**
+ * NOUVEAU : Gère l'affichage du bouton retour de manière centralisée
+ * Le bouton s'affiche SI un menu est ouvert OU SI le détail d'un plat est ouvert.
+ */
+function updateBackButton() {
+    const isDetailOpen = detail.classList.contains("active");
+    const isMenuOpen = currentCategory !== null;
+
+    if (isDetailOpen || isMenuOpen) {
+        backButton.classList.remove("hidden");
+    } else {
+        backButton.classList.add("hidden");
+    }
+}
+
 function getImageUrlFromPath(imagePath) {
     if (!imagePath) return "";
     return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${imagePath}`;
@@ -16,7 +31,6 @@ function getImageUrlFromPath(imagePath) {
 async function showCategory(category) {
     const container = document.getElementById("menu");
     
-    // Si on clique sur la catégorie déjà ouverte, on ferme tout
     if (currentCategory === category) {
         closeMenuAnimation();
         return;
@@ -25,13 +39,12 @@ async function showCategory(category) {
     currentCategory = category;
     container.innerHTML = "";
 
-    // Gestion de l'état actif des boutons
     document.querySelectorAll("#navigation button").forEach(btn => {
         btn.classList.toggle("active", btn.getAttribute('data-cat') === category);
     });
 
-    // Affiche le bouton retour car un menu est ouvert
-    backButton.classList.remove("hidden");
+    // On met à jour le bouton après avoir changé la catégorie
+    updateBackButton();
 
     if (cache[category]) {
         displayCategory(cache[category]);
@@ -67,10 +80,7 @@ function displayCategory(grouped) {
         dishes.forEach(dish => {
             const card = document.createElement("div");
             card.className = "card";
-
-            const displayPrice = (dish.price === 0 || dish.price === "0")
-                ? "Inclus"
-                : `${dish.price} €`;
+            const displayPrice = (dish.price === 0 || dish.price === "0") ? "Inclus" : `${dish.price} €`;
 
             card.innerHTML = `
                 <img src="${getImageUrlFromPath(dish.image_path)}" alt="${dish.name}">
@@ -89,19 +99,11 @@ function displayCategory(grouped) {
 }
 
 function showDetail(dish) {
-    const displayPrice = (dish.price === 0 || dish.price === "0")
-        ? "Inclus"
-        : `${dish.price} €`;
-
+    const displayPrice = (dish.price === 0 || dish.price === "0") ? "Inclus" : `${dish.price} €`;
     let extraContent = "";
-    if (dish.description && dish.description.trim() !== "") {
-        extraContent += `<p style="margin-top:20px;">${dish.description}</p>`;
-    }
-
-    if (dish.ingredients && dish.ingredients.trim() !== "") {
-        extraContent += `<p style="font-size:0.9rem; opacity:0.8; font-style:italic; margin-top:15px; border-top: 1px solid #e0dbd0; padding-top:10px;">
-                            ${dish.ingredients}
-                         </p>`;
+    if (dish.description?.trim()) extraContent += `<p style="margin-top:20px;">${dish.description}</p>`;
+    if (dish.ingredients?.trim()) {
+        extraContent += `<p style="font-size:0.9rem; opacity:0.8; font-style:italic; margin-top:15px; border-top: 1px solid #e0dbd0; padding-top:10px;">${dish.ingredients}</p>`;
     }
 
     detail.innerHTML = `
@@ -111,6 +113,7 @@ function showDetail(dish) {
                 <h2>${dish.name}</h2>
                 <div style="font-size:1.5rem; color:#c06c4c; font-family:'Cormorant Garamond', serif;">${displayPrice}</div>
                 ${extraContent}
+                <button onclick="closeDetail()" style="margin-top:30px; background:#c06c4c; color:white; border:none; padding:10px 20px; border-radius:4px; cursor:pointer;">Fermer</button>
             </div>
         </div>
     `;
@@ -118,8 +121,7 @@ function showDetail(dish) {
     detail.classList.remove("hidden");
     document.body.classList.add("overlay-open");
     
-    // S'assurer que le bouton retour est visible sur le détail
-    backButton.classList.remove("hidden");
+    updateBackButton();
 }
 
 function closeDetail() {
@@ -127,10 +129,8 @@ function closeDetail() {
     detail.classList.add("hidden");
     document.body.classList.remove("overlay-open");
     
-    // CORRECTION : Si aucun menu n'est ouvert en arrière-plan, on cache le bouton retour
-    if (!currentCategory) {
-        backButton.classList.add("hidden");
-    }
+    // Crucial : on vérifie si on doit encore afficher le bouton retour
+    updateBackButton();
 }
 
 function closeMenuAnimation() {
@@ -138,33 +138,23 @@ function closeMenuAnimation() {
     document.getElementById("menu").innerHTML = "";
     document.querySelectorAll("#navigation button").forEach(btn => btn.classList.remove("active"));
     
-    // Cache le bouton retour car on revient à l'accueil
-    backButton.classList.add("hidden");
+    // On cache le bouton puisque tout est fermé
+    updateBackButton();
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Logique du bouton Retour
 backButton.onclick = () => {
-    // Si un détail de plat est ouvert, on le ferme en priorité
     if (detail.classList.contains("active")) {
         closeDetail();
-    } 
-    // Sinon, si un menu est ouvert, on ferme le menu
-    else if (currentCategory) {
+    } else if (currentCategory) {
         closeMenuAnimation();
     }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
     const nav = document.getElementById("navigation");
-    const labels = {
-        entree: "Entrées",
-        plat: "Plats",
-        accompagnement: "Garnitures",
-        dessert: "Desserts",
-        boisson: "Boissons"
-    };
+    const labels = { entree: "Entrées", plat: "Plats", accompagnement: "Garnitures", dessert: "Desserts", boisson: "Boissons" };
     Object.keys(labels).forEach(cat => {
         const btn = document.createElement("button");
         btn.textContent = labels[cat];
@@ -172,4 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.onclick = () => showCategory(cat);
         nav.appendChild(btn);
     });
+    
+    // Au chargement, on s'assure qu'il est caché
+    updateBackButton();
 });
