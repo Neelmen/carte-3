@@ -1,315 +1,363 @@
-/* ===============================
-   Styles gÃ©nÃ©raux client
-================================= */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@200;300;400&display=swap');
+/* ============================================================
+   Thème : Bistronomie Raffinée (Chaleureux & Minimaliste)
+   Palette : Lait d'Avoine, Terre Cuite, Anthracite Fin, Or Doux
+============================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap');
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 300;
+    font-family: 'Tenor Sans', sans-serif; /* Police fine et moderne */
     margin: 0;
-    padding: 20px;
-    background: #e1c699;
+    min-height: 100vh;
+    background-color: #fdfcf9; /* Couleur lait d'avoine très claire */
+    color: #333; /* Anthracite doux */
+    padding: 20px 15px;
+    display: flex;
+    justify-content: center;
     text-align: center;
-    color: #333;
-    line-height: 1.6;
+    overflow-x: hidden;
+    letter-spacing: 0.03em;
+}
+
+.overlay-open {
+    overflow: hidden;
+}
+
+/* Conteneur principal (Cadre fin) */
+.page {
+    width: min(1200px, 100%);
+    background: #fff;
+    border-radius: 4px; /* Angles très peu arrondis */
+    padding: 60px 20px;
+    border: 1px solid #e0dbd0; /* Ligne très fine et claire */
+    margin-bottom: 140px;
+}
+
+/* --- LOGO & TITRE BISTROT --- */
+.logo-text {
+    font-family: 'Tenor Sans', sans-serif;
+    text-transform: uppercase;
+    font-size: clamp(1.2rem, 5vw, 1.9rem);
+    font-weight: 400;
+    color: #a67c52; /* Bronze doux */
+    letter-spacing: 0.2em;
+    white-space: nowrap;
 }
 
 h1 {
+    margin: 15px 0 60px;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(1.1rem, 4vw, 1.4rem);
+    color: #888;
+    text-transform: lowercase;
+    position: relative;
+    display: inline-block;
+}
+
+    /* Ligne fine en dessous de "notre carte" */
+    h1::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 25%;
+        width: 50%;
+        height: 1px;
+        background-color: #e0dbd0;
+    }
+
+h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 1.8rem;
+    color: #a67c52;
+    margin-top: 50px;
     margin-bottom: 30px;
-font-family: 'Cormorant Garamond', serif;
-    font-weight: 300; /* TrÃ¨s fin pour l'Ã©lÃ©gance */
-    font-size: 2.5rem;
-    color: #222;
-   letter-spacing: 6px;
 }
 
 /* ===============================
-   Navigation principale
+   Navigation Minimaliste
 ================================= */
 #navigation {
     display: flex;
+    flex-wrap: wrap; /* Aligné horizontalement sur grand écran */
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 50px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    #navigation button {
+        background: none;
+        border: none;
+        border-bottom: 1px solid transparent;
+        padding: 10px 5px;
+        color: #555;
+        text-transform: uppercase;
+        font-family: 'Tenor Sans', sans-serif;
+        font-size: 0.85rem;
+        letter-spacing: 0.15em;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        position: relative;
+    }
+
+        /* L'effet 'onde' est remplacé par un soulignement fin */
+        #navigation button:hover,
+        #navigation button.active {
+            color: #c06c4c; /* Terre cuite */
+        }
+
+        #navigation button::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background-color: #c06c4c;
+            transition: all 0.4s ease;
+        }
+
+        #navigation button:hover::after,
+        #navigation button.active::after {
+            width: 100%;
+            left: 0;
+        }
+
+/* ===============================
+   Grille des Plats (1 col, Lignes)
+================================= */
+.category-group {
+    position: relative;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
-    z-index: 2;
+    gap: 0; /* Plats collés, séparés par des lignes */
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0;
 }
 
-#navigation button {
-    width: 220px;
-    position: relative;
-    overflow: hidden;
-    background: white;
-    border: none;
-    padding: 15px;
-    border-radius: 12px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    cursor: pointer;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-    z-index: 2;
-    color: #333 !important;
-    -webkit-appearance: none;
-    transition: all 0.25s ease;
-}
+    /* Suppression des câbles, remplacés par des pointillés fins au centre */
+    .category-group::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 1px;
+        border-left: 1px dotted #e0dbd0;
+        z-index: 1;
+    }
 
-#navigation button:hover {
-    background: #e63946;
-    color: white !important;
-}
-
-#navigation button.active {
-    background: #e63946;
-    color: white !important;
-}
-
-/* ===============================
-   Sous-menu (sous-catÃ©gories)
-================================= */
-#menu button {
-    width: 220px;
-    padding: 15px;
-    font-size: 1.05rem;
-    border: none;
-    border-radius: 12px;
-    background: white;
-    color: #333 !important;
-    cursor: pointer;
-    margin: 10px auto 30px;
-    display: block;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-    z-index: 2;
-    -webkit-appearance: none;
-    font-family: inherit;
-    transition: all 0.25s ease;
-}
-
-#menu button:hover {
-    background: #E69830;
-    color: white !important;
-}
-
-/* ===============================
-   Cartes de plats
-================================= */
 .card {
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
+    background: #fff;
+    border-radius: 0; /* Rectangulaire net */
     width: 100%;
-    max-width: 260px;
-    margin: 0;
     cursor: pointer;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border: none;
+    border-bottom: 1px solid #f0eee9; /* Ligne de séparation fine */
+    display: flex; /* Image à gauche, texte à droite */
+    align-items: center;
+    padding: 20px 0;
+    transition: background 0.3s ease;
+    position: relative;
+    z-index: 2;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 25px rgba(0,0,0,0.35);
-}
+    .card:last-child {
+        border-bottom: none;
+    }
 
-.card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 10px 10px 0 0;
+    .card:hover {
+        background-color: #fdfcf9;
+    }
+
+    .card img {
+        width: 80px; /* Petite image ronde façon bistrot */
+        height: 80px;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 50%; /* Image ronde pour contraster avec les lignes droites */
+        margin-left: 15px;
+        margin-right: 25px;
+        border: 1px solid #f0eee9;
+    }
+
+.card-text-wrapper {
+    flex: 1;
+    text-align: left;
+    padding-right: 15px;
 }
 
 .card h3 {
-   font-family: 'Cormorant Garamond', serif;
-    margin: 10px;
-   letter-spacing: 1.5px;
-    font-size: 1.2rem;
+    margin: 0 0 5px;
+    color: #333;
+    font-family: 'Tenor Sans', sans-serif;
     font-weight: 400;
-   text-transform: uppercase;
-    color: #111;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
 }
 
-.card p {
-    margin: 5px 10px;
-    font-size: 0.95rem;
-    color: #555;
-   font-family: 'Montserrat', sans-serif;
+.card .price-tag {
+    color: #c06c4c; /* Terre cuite */
+    font-family: 'Cormorant Garamond', serif;
     font-weight: 400;
-   letter-spacing: 0.5px;
+    font-size: 1.1rem;
 }
 
 /* ===============================
-   Fiche dÃ©taillÃ©e du plat (zoom card)
+   ZOOM PLAT (Feutré & Épuré)
 ================================= */
 #dish-detail {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
+    background-color: rgba(253, 252, 249, 0.98); /* Fond clair mat */
+    z-index: 1500;
+    display: none;
+    flex-direction: column;
+    padding-bottom: 120px;
+    backdrop-filter: blur(3px);
+}
+
+    #dish-detail.active {
+        display: flex;
+        animation: fadeIn 0.5s ease;
+    }
+
+.zoom-container {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    background: rgba(0,0,0,0.85);
-    z-index: 10000;
-    padding: 0;
+    align-items: center;
+    padding: 30px;
     overflow-y: auto;
 }
 
-#dish-detail .card {
-    width: calc(100% - 20px);
-    max-width: 500px;
-    margin: 10px 0;
-    border-radius: 10px;
-    background: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-#dish-detail .card img {
+.zoom-image {
     width: 100%;
-    height: auto;
-    max-height: 60vh;
-    object-fit: contain;
-    border-radius: 10px;
-    margin-bottom: 20px;
+    max-width: 450px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 4px; /* Légèrement cassé */
+    border: 1px solid #e0dbd0;
+    box-shadow: 0 10px 30px rgba(166, 124, 82, 0.1); /* Ombre très douce bronze */
 }
 
-#dish-detail .card h3 {
-    font-size: 1.5rem;
-    margin: 10px 0;
-    color: #222;
-}
-
-#dish-detail .card p {
-    font-size: 1rem;
-    color: #555;
-    margin: 5px 0;
+.zoom-info {
+    margin-top: 30px;
+    max-width: 450px;
+    width: 100%;
     text-align: left;
-    width: 100%;
 }
 
-/* Cache l'overlay par dÃ©faut */
+    .zoom-info h2 {
+        color: #a67c52;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 300;
+        font-size: 2.2rem;
+        margin: 10px 0;
+        text-align: left;
+    }
+
+    .zoom-info p {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: #666;
+    }
+
+/* ===============================
+   Bouton Retour (Ligne Capsule Fin)
+================================= */
+#back-button {
+    position: fixed;
+    left: 50%;
+    bottom: 40px;
+    transform: translateX(-50%);
+    width: min(250px, 80%);
+    background: #fff;
+    color: #c06c4c !important; /* Texte terre cuite */
+    padding: 14px;
+    border-radius: 2px; /* Presque droit */
+    font-family: 'Tenor Sans', sans-serif;
+    font-weight: 400;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    z-index: 2000;
+    cursor: pointer;
+    border: 1px solid #c06c4c; /* Contour fin */
+    transition: all 0.3s ease;
+}
+
+    #back-button:hover {
+        background-color: #c06c4c;
+        color: #fff !important;
+    }
+
+/* Utilitaires */
 .hidden {
     display: none !important;
 }
 
-/* ===============================
-   Bouton retour
-================================= */
-#back-button {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #e63946;
-    color: white !important;
-    padding: 12px 25px;
-    border-radius: 30px;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 10001;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
-}
-
-/* ===============================
-   Espace bas du menu
-================================= */
-#menu {
-    padding-bottom: 120px;
-    padding-top: 30px;
-}
-
-.category-group {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    justify-items: center;
-    max-width: 500px;
-    margin: 0 auto 30px;
-}
-
-#menu h2 {
-    margin-top: 40px;
-    margin-bottom: 10px;
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 500;
-   font-style: italic;
-    font-size: 1.3rem;
-    color: #222;
-    letter-spacing: 0.5px;
-}
-
-/* Safari fallback pour tous les boutons et inputs */
-button, input, select, textarea {
-    -webkit-appearance: none;
-    color: inherit !important;
-    font-family: inherit;
-}
-
-/* DÃ©sactive le hover sur les boutons quand la classe no-hover est active */
-#navigation.no-hover button:hover {
-    background: white;
-    color: #333 !important;
-}
-
-/*Le texte TITRE avec effet du menu*/
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,700;1,700&display=swap');
-.logo-text {
-    font-family: 'Cormorant Garamond', serif;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 2rem;
-    font-weight: bold;
-    font-style: none;
-    color: #333; /* Couleur de base du texte */
-    text-align: center;
-    margin-bottom: 20px;
-    position: relative;
-    display: inline-block;
-    
-    /* PrÃ©paration du dÃ©gradÃ© pour l'effet de reflet */
-    background: linear-gradient(
-        to right, 
-        #333 0%, 
-        #333 40%, 
-        #ffffff 50%, 
-        #333 60%, 
-        #333 100%
-    );
-    background-size: 200% auto;
-    background-clip: text;
-    -webkit-background-clip: text; /* Pour Chrome/Safari */
-    text-fill-color: transparent;
-    -webkit-text-fill-color: transparent;
-    
-    /* Animation */
-    animation: shine 3s linear infinite;
-}
-
-/* L'animation qui dÃ©place le dÃ©gradÃ© */
 @keyframes shine {
-    to {
+    0% {
         background-position: 200% center;
+    }
+
+    100% {
+        background-position: -200% center;
     }
 }
 
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255,255, 255, 255); /* orange */
-    transform: scale(0);
-    animation: ripple-animation 0.6s ease-out;
-    pointer-events: none;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
-@keyframes ripple-animation {
-    to {
-        transform: scale(4);
-        opacity: 0;
+/* Adaptations Mobile */
+@media (max-width: 720px) {
+    .page {
+        padding: 40px 10px;
+        border-radius: 0;
+        border: none;
+    }
+
+    #navigation {
+        flex-direction: column;
+        gap: 5px;
+        width: 100%;
+    }
+
+        #navigation button {
+            width: 100%;
+            border-bottom: 1px solid #f0eee9;
+            text-align: left;
+            padding: 15px;
+        }
+
+            #navigation button::after {
+                display: none;
+            }
+
+    .card img {
+        width: 60px;
+        height: 60px;
+        margin-right: 15px;
     }
 }

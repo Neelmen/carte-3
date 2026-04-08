@@ -1,54 +1,31 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu du restaurant</title>
-
-    <!-- Favicon -->
+    <title>La Carte - Maison Grangousier</title>
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-
-    <!-- Feuille de style -->
     <link rel="stylesheet" href="style.css">
-
-    <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-
 <body>
 
-<div class="page">
+    <div class="page">
+        <div class="main-content">
+            <div class="logo-text">Le grangousier</div>
 
-    <div class="side left"></div>
+            <h1>Cuisine d'instinct</h1>
 
-    <div class="main-content">
-        <!-- Texte LOGO -->
-        <div class="logo-text">Le grangousier</div>
+            <div id="navigation"></div>
 
-        <!-- texte brut -->
-        <h1>Notre Carte</h1>
+            <div id="menu"></div>
 
-        <!-- Navigation principale : catégories -->
-        <div id="navigation"></div>
-
-        <!-- Conteneur des sous-menus et cartes de plats -->
-        <div id="menu"></div>
-
-        <!-- Fiche détaillée du plat (vide, rempli via JS) -->
-        <div id="dish-detail" class="hidden"></div>
-
+            <div id="dish-detail" class="hidden"></div>
+        </div>
     </div>
 
-    <div class="side right"></div>
+    <div id="back-button" class="hidden">RETOUR</div>
 
-</div>
-
-<!-- Bouton retour toujours au-dessus -->
-<div id="back-button" class="hidden">← Retour</div>
-
-<!-- JS -->
-<script src="app.js"></script>
-
+    <script src="app.js"></script>
 </body>
 </html>
