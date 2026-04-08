@@ -1,91 +1,88 @@
 /* ============================================================
-   Thème : Bistronomie Raffinée (Chaleureux & Minimaliste)
-   Palette : Lait d'Avoine, Terre Cuite, Anthracite Fin, Or Doux
+   ThÃ¨me : Bistronomie RaffinÃ©e (LisibilitÃ© OptimisÃ©e)
+   Palette : Lait d'Avoine, Terre Cuite, Anthracite Profond
 ============================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap');
+/* Importation des graisses 400, 500 et 600 pour garantir un rendu net */
+@import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 
 *, *::before, *::after {
     box-sizing: border-box;
 }
 
 body {
-    font-family: 'Tenor Sans', sans-serif; /* Police fine et moderne */
+    font-family: 'Tenor Sans', sans-serif;
     margin: 0;
     min-height: 100vh;
-    background-color: #fdfcf9; /* Couleur lait d'avoine très claire */
-    color: #333; /* Anthracite doux */
+    background-color: #fdfcf9; /* Lait d'avoine */
+    color: #1a1a1a; /* Anthracite plus sombre pour contraste */
     padding: 20px 15px;
     display: flex;
     justify-content: center;
     text-align: center;
     overflow-x: hidden;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
 }
 
 .overlay-open {
     overflow: hidden;
 }
 
-/* Conteneur principal (Cadre fin) */
+/* --- CONTENEUR PRINCIPAL --- */
 .page {
     width: min(1200px, 100%);
     background: #fff;
-    border-radius: 4px; /* Angles très peu arrondis */
+    border-radius: 4px;
     padding: 60px 20px;
-    border: 1px solid #e0dbd0; /* Ligne très fine et claire */
+    border: 1px solid #e0dbd0;
     margin-bottom: 140px;
 }
 
-/* --- LOGO & TITRE BISTROT --- */
+/* --- LOGO & TITRES --- */
 .logo-text {
     font-family: 'Tenor Sans', sans-serif;
     text-transform: uppercase;
-    font-size: clamp(1.2rem, 5vw, 1.9rem);
+    font-size: clamp(1.4rem, 6vw, 2.2rem);
     font-weight: 400;
-    color: #a67c52; /* Bronze doux */
+    color: #a67c52;
     letter-spacing: 0.2em;
-    white-space: nowrap;
 }
 
 h1 {
     margin: 15px 0 60px;
     font-family: 'Cormorant Garamond', serif;
-    font-weight: 300;
+    font-weight: 400;
     font-style: italic;
-    font-size: clamp(1.1rem, 4vw, 1.4rem);
-    color: #888;
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+    color: #777;
     text-transform: lowercase;
     position: relative;
     display: inline-block;
 }
 
-    /* Ligne fine en dessous de "notre carte" */
-    h1::after {
-        content: "";
-        position: absolute;
-        bottom: -10px;
-        left: 25%;
-        width: 50%;
-        height: 1px;
-        background-color: #e0dbd0;
-    }
+h1::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 25%;
+    width: 50%;
+    height: 1px;
+    background-color: #e0dbd0;
+}
 
 h2 {
     font-family: 'Cormorant Garamond', serif;
-    font-weight: 300;
-    font-size: 1.8rem;
+    font-weight: 500;
+    font-size: 2.2rem;
     color: #a67c52;
     margin-top: 50px;
     margin-bottom: 30px;
 }
 
-/* ===============================
-   Navigation Minimaliste
-================================= */
+/* --- NAVIGATION --- */
 #navigation {
     display: flex;
-    flex-wrap: wrap; /* Aligné horizontalement sur grand écran */
+    flex-wrap: wrap;
     justify-content: center;
     gap: 15px;
     margin-bottom: 50px;
@@ -94,103 +91,85 @@ h2 {
     margin-right: auto;
 }
 
-    #navigation button {
-        background: none;
-        border: none;
-        border-bottom: 1px solid transparent;
-        padding: 10px 5px;
-        color: #555;
-        text-transform: uppercase;
-        font-family: 'Tenor Sans', sans-serif;
-        font-size: 0.85rem;
-        letter-spacing: 0.15em;
-        cursor: pointer;
-        transition: all 0.4s ease;
-        position: relative;
-    }
+#navigation button {
+    background: none;
+    border: none;
+    padding: 10px 15px;
+    color: #444;
+    text-transform: uppercase;
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 0.95rem; /* Plus grand */
+    font-weight: 500;   /* Plus gras */
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
 
-        /* L'effet 'onde' est remplacé par un soulignement fin */
-        #navigation button:hover,
-        #navigation button.active {
-            color: #c06c4c; /* Terre cuite */
-        }
+#navigation button:hover,
+#navigation button.active {
+    color: #c06c4c;
+}
 
-        #navigation button::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 1px;
-            background-color: #c06c4c;
-            transition: all 0.4s ease;
-        }
+#navigation button::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #c06c4c;
+    transition: all 0.4s ease;
+}
 
-        #navigation button:hover::after,
-        #navigation button.active::after {
-            width: 100%;
-            left: 0;
-        }
+#navigation button:hover::after,
+#navigation button.active::after {
+    width: 100%;
+    left: 0;
+}
 
-/* ===============================
-   Grille des Plats (1 col, Lignes)
-================================= */
+/* --- GRILLE DES PLATS --- */
 .category-group {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0; /* Plats collés, séparés par des lignes */
-    max-width: 600px;
+    max-width: 700px; /* Un peu plus large pour le confort */
     margin: 0 auto;
-    padding: 0;
 }
-
-    /* Suppression des câbles, remplacés par des pointillés fins au centre */
-    .category-group::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 50%;
-        width: 1px;
-        border-left: 1px dotted #e0dbd0;
-        z-index: 1;
-    }
 
 .card {
     background: #fff;
-    border-radius: 0; /* Rectangulaire net */
     width: 100%;
     cursor: pointer;
     border: none;
-    border-bottom: 1px solid #f0eee9; /* Ligne de séparation fine */
-    display: flex; /* Image à gauche, texte à droite */
+    border-bottom: 1px solid #f0eee9;
+    display: flex;
     align-items: center;
-    padding: 20px 0;
+    padding: 25px 0; /* Plus d'espace pour respirer */
     transition: background 0.3s ease;
     position: relative;
     z-index: 2;
 }
 
-    .card:last-child {
-        border-bottom: none;
-    }
+.card:last-child {
+    border-bottom: none;
+}
 
-    .card:hover {
-        background-color: #fdfcf9;
-    }
+.card:hover {
+    background-color: #fdfcf9;
+}
 
-    .card img {
-        width: 80px; /* Petite image ronde façon bistrot */
-        height: 80px;
-        aspect-ratio: 1 / 1;
-        object-fit: cover;
-        border-radius: 50%; /* Image ronde pour contraster avec les lignes droites */
-        margin-left: 15px;
-        margin-right: 25px;
-        border: 1px solid #f0eee9;
-    }
+.card img {
+    width: 90px; /* Image lÃ©gÃ¨rement agrandie */
+    height: 90px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-left: 10px;
+    margin-right: 25px;
+    border: 1px solid #f0eee9;
+}
 
 .card-text-wrapper {
     flex: 1;
@@ -200,38 +179,35 @@ h2 {
 
 .card h3 {
     margin: 0 0 5px;
-    color: #333;
+    color: #1a1a1a;
     font-family: 'Tenor Sans', sans-serif;
-    font-weight: 400;
-    font-size: 1rem;
-    letter-spacing: 0.05em;
+    font-weight: 500; /* Plus de graisse */
+    font-size: 1.2rem; /* Plus grand pour lisibilitÃ© */
+    letter-spacing: 0.02em;
+    line-height: 1.2;
 }
 
 .card .price-tag {
-    color: #c06c4c; /* Terre cuite */
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 400;
+    color: #b05635; /* Terre cuite renforcÃ©e */
+    font-family: 'Tenor Sans', sans-serif;
+    font-weight: 600; /* Bien visible */
     font-size: 1.1rem;
 }
 
-/* ===============================
-   ZOOM PLAT (Feutré & Épuré)
-================================= */
+/* --- ZOOM PLAT --- */
 #dish-detail {
     position: fixed;
     inset: 0;
-    background-color: rgba(253, 252, 249, 0.98); /* Fond clair mat */
+    background-color: #fdfcf9;
     z-index: 1500;
     display: none;
     flex-direction: column;
-    padding-bottom: 120px;
-    backdrop-filter: blur(3px);
 }
 
-    #dish-detail.active {
-        display: flex;
-        animation: fadeIn 0.5s ease;
-    }
+#dish-detail.active {
+    display: flex;
+    animation: fadeIn 0.4s ease;
+}
 
 .zoom-container {
     flex: 1;
@@ -245,119 +221,93 @@ h2 {
 
 .zoom-image {
     width: 100%;
-    max-width: 450px;
+    max-width: 500px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    border-radius: 4px; /* Légèrement cassé */
+    border-radius: 4px;
     border: 1px solid #e0dbd0;
-    box-shadow: 0 10px 30px rgba(166, 124, 82, 0.1); /* Ombre très douce bronze */
 }
 
 .zoom-info {
-    margin-top: 30px;
-    max-width: 450px;
+    margin-top: 35px;
+    max-width: 500px;
     width: 100%;
     text-align: left;
 }
 
-    .zoom-info h2 {
-        color: #a67c52;
-        font-family: 'Cormorant Garamond', serif;
-        font-weight: 300;
-        font-size: 2.2rem;
-        margin: 10px 0;
-        text-align: left;
-    }
+.zoom-info h2 {
+    color: #a67c52;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 2.6rem;
+    margin: 0 0 15px;
+}
 
-    .zoom-info p {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 1.05rem;
-        line-height: 1.6;
-        color: #666;
-    }
+.zoom-info p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; /* Lecture confortable */
+    line-height: 1.5;
+    color: #222;
+}
 
-/* ===============================
-   Bouton Retour (Ligne Capsule Fin)
-================================= */
+/* --- BOUTON RETOUR --- */
 #back-button {
     position: fixed;
     left: 50%;
     bottom: 40px;
     transform: translateX(-50%);
-    width: min(250px, 80%);
+    width: min(280px, 85%);
     background: #fff;
-    color: #c06c4c !important; /* Texte terre cuite */
-    padding: 14px;
-    border-radius: 2px; /* Presque droit */
+    color: #c06c4c !important;
+    padding: 16px;
+    border-radius: 4px;
     font-family: 'Tenor Sans', sans-serif;
-    font-weight: 400;
-    font-size: 0.8rem;
-    letter-spacing: 0.2em;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     z-index: 2000;
     cursor: pointer;
-    border: 1px solid #c06c4c; /* Contour fin */
+    border: 2px solid #c06c4c; /* Plus Ã©pais */
     transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-    #back-button:hover {
-        background-color: #c06c4c;
-        color: #fff !important;
-    }
-
-/* Utilitaires */
-.hidden {
-    display: none !important;
+#back-button:hover {
+    background-color: #c06c4c;
+    color: #fff !important;
 }
 
-@keyframes shine {
-    0% {
-        background-position: 200% center;
-    }
-
-    100% {
-        background-position: -200% center;
-    }
-}
-
+/* Animations */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Adaptations Mobile */
 @media (max-width: 720px) {
     .page {
-        padding: 40px 10px;
-        border-radius: 0;
+        padding: 30px 10px;
         border: none;
     }
 
-    #navigation {
-        flex-direction: column;
-        gap: 5px;
+    #navigation button {
         width: 100%;
+        text-align: center;
+        border-bottom: 1px solid #f0eee9;
     }
 
-        #navigation button {
-            width: 100%;
-            border-bottom: 1px solid #f0eee9;
-            text-align: left;
-            padding: 15px;
-        }
-
-            #navigation button::after {
-                display: none;
-            }
+    .card {
+        padding: 20px 0;
+    }
 
     .card img {
-        width: 60px;
-        height: 60px;
+        width: 75px;
+        height: 75px;
         margin-right: 15px;
+    }
+
+    .card h3 {
+        font-size: 1.1rem;
     }
 }
