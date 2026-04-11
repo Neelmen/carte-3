@@ -75,19 +75,62 @@ function displayCategory(grouped) {
         const groupDiv = document.createElement("div");
         groupDiv.className = "category-group";
 
-        dishes.forEach(dish => {
+        dishes.forEach((dish, index) => {
             const card = document.createElement("div");
-            card.className = "card";
-            const displayPrice = (dish.price === 0 || dish.price === "0") ? "Inclus" : `${dish.price} €`;
+            card.className = "card loading";
 
             card.innerHTML = `
-                <img src="${getImageUrlFromPath(dish.image_path)}" alt="${dish.name}">
-                <div class="card-text-wrapper">
-                    <h3>${dish.name}</h3>
-                    <div class="price-tag">${displayPrice}</div>
-                </div>
-            `;
-            card.onclick = () => showDetail(dish);
+    <div class="loader">
+        <svg width="60" height="60">
+            <circle cx="30" cy="30" r="20" fill="none" stroke-width="3"
+                class="stroke-still"></circle>
+            <circle cx="30" cy="30" r="20" fill="none" stroke-width="3"
+                class="stroke-animation"></circle>
+        </svg>
+    </div>
+`;
+
+            // précharge image
+            const img = new Image();
+            img.src = getImageUrlFromPath(dish.image_path);
+
+            // si déjà en cache → affichage direct
+            if (img.complete) {
+                showCardInstant();
+            } else {
+                showCardWithDelay();
+            }
+
+            function showCardInstant() {
+                const displayPrice = (dish.price === 0 || dish.price === "0") ? "Inclus" : `${dish.price} €`;
+
+                card.innerHTML = `
+        <img src="${img.src}" alt="${dish.name}">
+        <div class="card-text-wrapper">
+            <h3>${dish.name}</h3>
+            <div class="price-tag">${displayPrice}</div>
+        </div>
+    `;
+
+                card.classList.remove("loading");
+                card.classList.add("loaded");
+
+                card.onclick = () => showDetail(dish);
+            }
+
+            function showCardWithDelay() {
+                const startTime = Date.now();
+                const minDelay = 1000 + (index * 200);
+
+                img.onload = () => {
+                    const elapsed = Date.now() - startTime;
+                    const remaining = Math.max(0, minDelay - elapsed);
+
+                    setTimeout(() => {
+                        showCardInstant();
+                    }, remaining);
+                };
+            }
             groupDiv.appendChild(card);
         });
         container.appendChild(groupDiv);
