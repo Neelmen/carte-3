@@ -1,319 +1,3 @@
-/* ============================================================
-   Thème : Bistronomie Raffinée (Lisibilité Optimisée)
-   Palette : Lait d'Avoine, Terre Cuite, Anthracite Profond
-============================================================== */
-
-@import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
-
-*, *::before, *::after {
-    box-sizing: border-box;
-}
-
-/* CORRECTION CRUCIALE : Force la disparition des éléments */
-.hidden {
-    display: none !important;
-}
-
-body {
-    font-family: 'Tenor Sans', sans-serif;
-    margin: 0;
-    min-height: 100vh;
-    background-image: url("https://www.transparenttextures.com/patterns/gray-paper.png");
-    color: #1a1a1a;
-    padding: 20px 15px;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    overflow-x: hidden;
-    letter-spacing: 0.02em;
-}
-
-.overlay-open {
-    overflow: hidden;
-}
-
-.page {
-    position: relative;
-    background: #fff;
-    width: min(1200px, 100%);
-    border-radius: 4px;
-    padding: 60px 20px;
-    border: 1px solid #e0dbd0;
-    margin-bottom: 140px;
-    box-shadow: 0px 2px 38px rgba(0, 0, 0, 0.2);
-}
-
-    /* Ombres papier */
-    .page::after,
-    .page::before {
-        content: '';
-        position: absolute;
-        z-index: -1;
-    }
-
-    .page::after {
-        width: 90%;
-        height: 10px;
-        top: 30px;
-        right: 8px;
-        transform: rotate(-3deg);
-        box-shadow: 0px -25px 35px 0px rgba(0,0,0,0.5);
-    }
-
-    .page::before {
-        width: 10px;
-        height: 95%;
-        top: 5px;
-        right: 18px;
-        transform: rotate(3deg);
-        box-shadow: 22px 0px 35px 0px rgba(0,0,0,0.5);
-    }
-
-/* --- LOGO & TITRES --- */
-.logo-text {
-    font-family: 'Tenor Sans', sans-serif;
-    text-transform: uppercase;
-    font-size: clamp(1.4rem, 6vw, 2.2rem);
-    font-weight: 400;
-    color: #a67c52;
-    letter-spacing: 0.2em;
-}
-
-h1 {
-    margin: 15px 0 60px;
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 400;
-    font-style: italic;
-    font-size: clamp(1.2rem, 4vw, 1.6rem);
-    color: #777;
-    text-transform: lowercase;
-    position: relative;
-    display: inline-block;
-}
-
-h1::after {
-    content: "";
-    position: absolute;
-    bottom: -10px;
-    left: 25%;
-    width: 50%;
-    height: 1px;
-    background-color: #e0dbd0;
-}
-
-h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 500;
-    font-size: 2.2rem;
-    color: #a67c52;
-    margin-top: 50px;
-    margin-bottom: 30px;
-}
-
-/* --- NAVIGATION --- */
-#navigation {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 50px;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#navigation button {
-    background: none;
-    border: none;
-    padding: 10px 15px;
-    color: #444;
-    text-transform: uppercase;
-    font-family: 'Tenor Sans', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-#navigation button:hover,
-#navigation button.active {
-    color: #c06c4c;
-}
-
-#navigation button::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background-color: #c06c4c;
-    transition: all 0.4s ease;
-}
-
-#navigation button:hover::after,
-#navigation button.active::after {
-    width: 100%;
-    left: 0;
-}
-
-/* --- GRILLE DES PLATS --- */
-.category-group {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.card {
-    background: #fff;
-    width: 100%;
-    cursor: pointer;
-    border: none;
-    border-bottom: 1px solid #f0eee9;
-    display: flex;
-    align-items: center;
-    padding: 25px 0;
-    transition: background 0.3s ease;
-    position: relative;
-    z-index: 2;
-}
-
-.card:last-child {
-    border-bottom: none;
-}
-
-.card:hover {
-    background-color: #fdfcf9;
-}
-
-.card img {
-    width: 90px;
-    height: 90px;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-left: 10px;
-    margin-right: 25px;
-    border: 1px solid #f0eee9;
-}
-
-.card-text-wrapper {
-    flex: 1;
-    text-align: left;
-    padding-right: 15px;
-}
-
-.card h3 {
-    margin: 0 0 5px;
-    color: #1a1a1a;
-    font-family: 'Tenor Sans', sans-serif;
-    font-weight: 500;
-    font-size: 1.2rem;
-    line-height: 1.2;
-}
-
-.card .price-tag {
-    color: #b05635;
-    font-family: 'Tenor Sans', sans-serif;
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-/* --- ZOOM PLAT --- */
-#dish-detail {
-    position: fixed;
-    inset: 0;
-    background-color: #fdfcf9;
-    z-index: 1500;
-    display: none; /* Caché par défaut */
-    flex-direction: column;
-}
-
-#dish-detail.active {
-    display: flex; /* S'affiche quand actif */
-    animation: fadeIn 0.4s ease;
-}
-
-.zoom-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
-    overflow-y: auto;
-}
-
-.zoom-image {
-    width: 100%;
-    max-width: 500px;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 4px;
-    border: 1px solid #e0dbd0;
-}
-
-.zoom-info {
-    margin-top: 35px;
-    max-width: 500px;
-    width: 100%;
-    text-align: left;
-}
-
-.zoom-info h2 {
-    color: #a67c52;
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 600;
-    font-size: 2.6rem;
-    margin: 0 0 15px;
-}
-
-.zoom-info p {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.3rem;
-    line-height: 1.5;
-    color: #222;
-}
-
-/* --- BOUTON RETOUR --- */
-#back-button {
-    position: fixed;
-    left: 50%;
-    bottom: 40px;
-    transform: translateX(-50%);
-    width: min(280px, 85%);
-    background: #fff;
-    color: #c06c4c !important;
-    padding: 16px;
-    border-radius: 4px;
-    font-family: 'Tenor Sans', sans-serif;
-    font-weight: 600;
-    font-size: 0.9rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    z-index: 2000;
-    cursor: pointer;
-    border: 2px solid #c06c4c;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-
-#back-button:hover {
-    background-color: #c06c4c;
-    color: #fff !important;
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
 /* Adaptations Mobile */
 @media (max-width: 720px) {
     .page {
@@ -329,15 +13,20 @@ h2 {
 
     .card {
         padding: 20px 0;
-        opacity: 1;
-        transform: translateY(10px);
+        opacity: 1 !important; /* Force la visibilité pour voir le loader */
+        transform: translateY(0);
+        min-height: 110px; /* Donne une taille à la carte vide */
+        display: flex;
+        align-items: center;
     }
-   
-   .card.loading {
-        background: transparent;
+
+    .card.loading {
+        justify-content: center; /* Centre le loader quand la carte est vide */
     }
-   .card.loaded {
-        animation: fadeIn 0.4s ease;
+
+    .card.loaded {
+        justify-content: flex-start;
+        animation: fadeIn 0.5s ease forwards;
     }
 
     .card img {
@@ -350,79 +39,44 @@ h2 {
         font-size: 1.1rem;
     }
 }
-/* CARD LOADING */
+
+/* CARD LOADING & LOADER */
 .card.loading {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 110px;
 }
-.card.loaded {
-    opacity: 1;
-    transform: translateY(0);
-    transition: all 0.4s ease;
-}
 
 .loader svg {
     width: 50px;
     height: 50px;
     animation: rotateLoader 2s linear infinite;
-    transform: translateZ(0);
-    will-change: transform;
 }
 
 @keyframes rotateLoader {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
-.stroke-still {
-    stroke: #e0dbd0;
-}
-
+.stroke-still { stroke: #e0dbd0; }
 .stroke-animation {
     fill: none;
     stroke: #c06c4c;
     stroke-width: 3;
     stroke-linecap: round;
-
     stroke-dasharray: 120;
     stroke-dashoffset: 120;
-
     animation: dash 1.4s linear infinite;
 }
 
 @keyframes dash {
-    0% {
-        stroke-dashoffset: 126;
-    }
-    50% {
-        stroke-dashoffset: 30;
-    }
-    100% {
-        stroke-dashoffset: 126;
-    }
+    0% { stroke-dashoffset: 126; }
+    50% { stroke-dashoffset: 30; }
+    100% { stroke-dashoffset: 126; }
 }
 
-@keyframes stroke-color {
-    0% {
-        stroke: #c06c4c;
-    }
-
-    25% {
-        stroke: #a67c52;
-    }
-
-    50% {
-        stroke: #777;
-    }
-
-    75% {
-        stroke: #c06c4c;
-    }
+@keyframes fadeIn {
+    from { opacity: 0.4; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
