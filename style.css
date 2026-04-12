@@ -329,8 +329,15 @@ h2 {
 
     .card {
         padding: 20px 0;
-        opacity: 0;
+        opacity: 1;
         transform: translateY(10px);
+    }
+   
+   .card.loading {
+        background: transparent;
+    }
+   .card.loaded {
+        animation: fadeIn 0.4s ease;
     }
 
     .card img {
