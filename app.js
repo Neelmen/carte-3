@@ -120,7 +120,7 @@ function displayCategory(grouped) {
 
             function showCardWithDelay() {
                 const startTime = Date.now();
-                const minDelay = 1000 + (index * 200);
+                const minDelay = 500 + (index * 200);
 
                 img.onload = () => {
                     const elapsed = Date.now() - startTime;
