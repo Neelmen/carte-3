@@ -138,7 +138,7 @@ function displayCategory(grouped) {
         container.appendChild(groupDiv);
     });
 
-    window.scrollTo({ top: container.offsetTop - 50, behavior: 'smooth' });
+    window.scrollTo({ top: container.offsetTop - 80, behavior: 'smooth' });
 }
 
 function showDetail(dish) {
