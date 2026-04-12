@@ -8,13 +8,9 @@ let currentCategory = null;
 const detail = document.getElementById("dish-detail");
 const backButton = document.getElementById("back-button");
 
-/**
- * Gère l'affichage du bouton retour de manière centralisée
- */
 function updateBackButton() {
     const isDetailOpen = detail.classList.contains("active");
     const isMenuOpen = currentCategory !== null;
-
     if (isDetailOpen || isMenuOpen) {
         backButton.classList.remove("hidden");
     } else {
@@ -36,7 +32,17 @@ async function showCategory(category) {
     }
     
     currentCategory = category;
-    container.innerHTML = "";
+
+    // 1. Affichage immédiat d'un loader global pour éviter l'effet "site bloqué"
+    container.innerHTML = `
+        <div id="global-loader" style="padding: 60px; display: flex; justify-content: center; width: 100%;">
+            <div class="loader">
+                <svg width="60" height="60">
+                    <circle cx="30" cy="30" r="20" fill="none" stroke-width="3" class="stroke-still"></circle>
+                    <circle cx="30" cy="30" r="20" fill="none" stroke-width="3" class="stroke-animation"></circle>
+                </svg>
+            </div>
+        </div>`;
 
     document.querySelectorAll("#navigation button").forEach(btn => {
         btn.classList.toggle("active", btn.getAttribute('data-cat') === category);
@@ -44,28 +50,32 @@ async function showCategory(category) {
 
     updateBackButton();
 
+    // 2. Récupération des données
+    let groupedData;
     if (cache[category]) {
-        displayCategory(cache[category]);
-        return;
+        groupedData = cache[category];
+    } else {
+        const { data, error } = await client.from("dishes").select("*").eq("category", category).eq("available", true);
+        if (error) {
+            container.innerHTML = "<p>Erreur lors du chargement des données.</p>";
+            return;
+        }
+        groupedData = data.reduce((acc, dish) => {
+            const sub = dish.subcategory || "_no_sub";
+            if (!acc[sub]) acc[sub] = [];
+            acc[sub].push(dish);
+            return acc;
+        }, {});
+        cache[category] = groupedData;
     }
 
-    const { data, error } = await client.from("dishes").select("*").eq("category", category).eq("available", true);
-    if (error) return;
-
-    const grouped = data.reduce((acc, dish) => {
-        const sub = dish.subcategory || "_no_sub";
-        if (!acc[sub]) acc[sub] = [];
-        acc[sub].push(dish);
-        return acc;
-    }, {});
-
-    cache[category] = grouped;
-    displayCategory(grouped);
+    // 3. Affichage de la structure du menu
+    displayCategory(groupedData);
 }
 
 function displayCategory(grouped) {
     const container = document.getElementById("menu");
-    container.innerHTML = "";
+    container.innerHTML = ""; 
 
     Object.entries(grouped).forEach(([sub, dishes]) => {
         const title = document.createElement("h2");
@@ -77,63 +87,50 @@ function displayCategory(grouped) {
 
         dishes.forEach((dish, index) => {
             const card = document.createElement("div");
-            card.className = "card loading";
+            card.className = "card loading"; 
 
+            // On injecte le loader dans la carte
             card.innerHTML = `
                 <div class="loader">
                     <svg width="60" height="60">
-                        <circle cx="30" cy="30" r="20" fill="none" stroke-width="3"
-                            class="stroke-still"></circle>
-                        <circle cx="30" cy="30" r="20" fill="none" stroke-width="3"
-                            class="stroke-animation"></circle>
+                        <circle cx="30" cy="30" r="20" fill="none" stroke-width="3" class="stroke-still"></circle>
+                        <circle cx="30" cy="30" r="20" fill="none" stroke-width="3" class="stroke-animation"></circle>
                     </svg>
                 </div>
             `;
-
-            const img = new Image();
-            img.src = getImageUrlFromPath(dish.image_path);
-
-            function showCardInstant() {
-                const displayPrice = (dish.price === 0 || dish.price === "0") ? "Inclus" : `${dish.price} €`;
-
-                card.innerHTML = `
-                    <img src="${img.src}" alt="${dish.name}">
-                    <div class="card-text-wrapper">
-                        <h3>${dish.name}</h3>
-                        <div class="price-tag">${displayPrice}</div>
-                    </div>
-                `;
-
-                card.classList.remove("loading");
-                card.classList.add("loaded");
-                card.onclick = () => showDetail(dish);
-            }
-
-            function showCardWithDelay() {
-                const startTime = Date.now();
-                const minDelay = 500 + (index * 200);
-
-                // Fonction de finalisation
-                const finish = () => {
-                    const elapsed = Date.now() - startTime;
-                    const remaining = Math.max(0, minDelay - elapsed);
-                    setTimeout(() => {
-                        showCardInstant();
-                    }, remaining);
-                };
-
-                if (img.complete) {
-                    finish();
-                } else {
-                    img.onload = finish;
-                    img.onerror = finish; // Sécurité si l'image est cassée
-                }
-            }
-
-            // On lance le processus de délai systématiquement
-            showCardWithDelay();
-            
             groupDiv.appendChild(card);
+
+            // 4. Chargement de l'image en tâche de fond avec le délai forcé
+            const img = new Image();
+            const startTime = Date.now();
+            const minDelay = 500 + (index * 150); 
+
+            const revealCard = () => {
+                const elapsed = Date.now() - startTime;
+                const remaining = Math.max(0, minDelay - elapsed);
+
+                setTimeout(() => {
+                    const displayPrice = (dish.price === 0 || dish.price === "0") ? "Inclus" : `${dish.price} €`;
+                    card.innerHTML = `
+                        <img src="${img.src}" alt="${dish.name}">
+                        <div class="card-text-wrapper">
+                            <h3>${dish.name}</h3>
+                            <div class="price-tag">${displayPrice}</div>
+                        </div>
+                    `;
+                    card.classList.remove("loading");
+                    card.classList.add("loaded");
+                    card.onclick = () => showDetail(dish);
+                }, remaining);
+            };
+
+            img.onload = revealCard;
+            img.onerror = revealCard; // Si l'image bug, on affiche quand même le texte
+            img.src = getImageUrlFromPath(dish.image_path);
+            
+            if (img.complete) {
+                requestAnimationFrame(() => revealCard());
+            }
         });
         container.appendChild(groupDiv);
     });
@@ -163,7 +160,6 @@ function showDetail(dish) {
     detail.classList.add("active");
     detail.classList.remove("hidden");
     document.body.classList.add("overlay-open");
-    
     updateBackButton();
 }
 
@@ -192,13 +188,7 @@ backButton.onclick = () => {
 
 document.addEventListener("DOMContentLoaded", () => {
     const nav = document.getElementById("navigation");
-    const labels = { 
-        entree: "Entrées", 
-        plat: "Plats", 
-        accompagnement: "Accompagnements",
-        dessert: "Desserts", 
-        boisson: "Boissons" 
-    };
+    const labels = { entree: "Entrées", plat: "Plats", accompagnement: "Accompagnements", dessert: "Desserts", boisson: "Boissons" };
     Object.keys(labels).forEach(cat => {
         const btn = document.createElement("button");
         btn.textContent = labels[cat];
@@ -206,6 +196,5 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.onclick = () => showCategory(cat);
         nav.appendChild(btn);
     });
-    
     updateBackButton();
 });
