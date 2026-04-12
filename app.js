@@ -80,41 +80,32 @@ function displayCategory(grouped) {
             card.className = "card loading";
 
             card.innerHTML = `
-    <div class="loader">
-        <svg width="60" height="60">
-            <circle cx="30" cy="30" r="20" fill="none" stroke-width="3"
-                class="stroke-still"></circle>
-            <circle cx="30" cy="30" r="20" fill="none" stroke-width="3"
-                class="stroke-animation"></circle>
-        </svg>
-    </div>
-`;
+                <div class="loader">
+                    <svg width="60" height="60">
+                        <circle cx="30" cy="30" r="20" fill="none" stroke-width="3"
+                            class="stroke-still"></circle>
+                        <circle cx="30" cy="30" r="20" fill="none" stroke-width="3"
+                            class="stroke-animation"></circle>
+                    </svg>
+                </div>
+            `;
 
-            // précharge image
             const img = new Image();
             img.src = getImageUrlFromPath(dish.image_path);
-
-            // si déjà en cache → affichage direct
-            if (img.complete) {
-                showCardInstant();
-            } else {
-                showCardWithDelay();
-            }
 
             function showCardInstant() {
                 const displayPrice = (dish.price === 0 || dish.price === "0") ? "Inclus" : `${dish.price} €`;
 
                 card.innerHTML = `
-        <img src="${img.src}" alt="${dish.name}">
-        <div class="card-text-wrapper">
-            <h3>${dish.name}</h3>
-            <div class="price-tag">${displayPrice}</div>
-        </div>
-    `;
+                    <img src="${img.src}" alt="${dish.name}">
+                    <div class="card-text-wrapper">
+                        <h3>${dish.name}</h3>
+                        <div class="price-tag">${displayPrice}</div>
+                    </div>
+                `;
 
                 card.classList.remove("loading");
                 card.classList.add("loaded");
-
                 card.onclick = () => showDetail(dish);
             }
 
@@ -122,15 +113,26 @@ function displayCategory(grouped) {
                 const startTime = Date.now();
                 const minDelay = 500 + (index * 200);
 
-                img.onload = () => {
+                // Fonction de finalisation
+                const finish = () => {
                     const elapsed = Date.now() - startTime;
                     const remaining = Math.max(0, minDelay - elapsed);
-
                     setTimeout(() => {
                         showCardInstant();
                     }, remaining);
                 };
+
+                if (img.complete) {
+                    finish();
+                } else {
+                    img.onload = finish;
+                    img.onerror = finish; // Sécurité si l'image est cassée
+                }
             }
+
+            // On lance le processus de délai systématiquement
+            showCardWithDelay();
+            
             groupDiv.appendChild(card);
         });
         container.appendChild(groupDiv);
@@ -146,7 +148,6 @@ function showDetail(dish) {
     if (dish.ingredients?.trim()) {
         extraContent += `<p style="font-size:0.9rem; opacity:0.8; font-style:italic; margin-top:15px; border-top: 1px solid #e0dbd0; padding-top:10px;">${dish.ingredients}</p>`;
     }
-
 
     detail.innerHTML = `
         <div class="zoom-container" onclick="closeDetail()">
