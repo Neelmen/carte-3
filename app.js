@@ -9,17 +9,34 @@ const detail = document.getElementById("dish-detail");
 const backButton = document.getElementById("back-button");
 
 /**
- * Gère l'affichage du bouton retour de manière centralisée
+ * GESTION DE L'ANIMATION ALÉATOIRE DES TRAITS
  */
+function initShineAnimation() {
+    const groups = document.querySelectorAll('.category-group');
+    if (groups.length === 0) return;
+
+    groups.forEach(group => {
+        // Fonction récursive pour l'aléatoire
+        const trigger = () => {
+            group.classList.add('animate-shine');
+
+            // On retire la classe après l'anim (1.8s) pour reset
+            setTimeout(() => {
+                group.classList.remove('animate-shine');
+
+                // Calcul du prochain délai entre 2 et 5 secondes
+                const nextShot = Math.floor(Math.random() * (5000 - 2000 + 1)) + 2000;
+                setTimeout(trigger, nextShot);
+            }, 1800);
+        };
+        trigger();
+    });
+}
+
 function updateBackButton() {
     const isDetailOpen = detail.classList.contains("active");
     const isMenuOpen = currentCategory !== null;
-
-    if (isDetailOpen || isMenuOpen) {
-        backButton.classList.remove("hidden");
-    } else {
-        backButton.classList.add("hidden");
-    }
+    backButton.classList.toggle("hidden", !isDetailOpen && !isMenuOpen);
 }
 
 function getImageUrlFromPath(imagePath) {
@@ -29,15 +46,12 @@ function getImageUrlFromPath(imagePath) {
 
 async function showCategory(category) {
     const container = document.getElementById("menu");
-    
     if (currentCategory === category) {
         closeMenuAnimation();
         return;
     }
-    
     currentCategory = category;
 
-    // ÉTAPE 1 : Affichage immédiat d'un loader global pour confirmer l'action sur mauvaise connexion
     container.innerHTML = `
         <div id="global-loader" style="padding: 60px; display: flex; justify-content: center; width: 100%;">
             <div class="loader">
@@ -54,14 +68,13 @@ async function showCategory(category) {
 
     updateBackButton();
 
-    // ÉTAPE 2 : Récupération des données (pendant que le loader global tourne)
     let groupedData;
     if (cache[category]) {
         groupedData = cache[category];
     } else {
         const { data, error } = await client.from("dishes").select("*").eq("category", category).eq("available", true);
         if (error) {
-            container.innerHTML = "<p>Erreur de chargement des données.</p>";
+            container.innerHTML = "<p>Erreur de chargement.</p>";
             return;
         }
         groupedData = data.reduce((acc, dish) => {
@@ -73,13 +86,12 @@ async function showCategory(category) {
         cache[category] = groupedData;
     }
 
-    // ÉTAPE 3 : Affichage immédiat de la structure (Titres + Cards avec loaders individuels)
     displayCategory(groupedData);
 }
 
 function displayCategory(grouped) {
     const container = document.getElementById("menu");
-    container.innerHTML = ""; 
+    container.innerHTML = "";
 
     Object.entries(grouped).forEach(([sub, dishes]) => {
         const title = document.createElement("h2");
@@ -91,22 +103,13 @@ function displayCategory(grouped) {
 
         dishes.forEach((dish, index) => {
             const card = document.createElement("div");
-            card.className = "card loading"; 
-
-            card.innerHTML = `
-                <div class="loader">
-                    <svg width="60" height="60">
-                        <circle cx="30" cy="30" r="20" fill="none" stroke-width="3" class="stroke-still"></circle>
-                        <circle cx="30" cy="30" r="20" fill="none" stroke-width="3" class="stroke-animation"></circle>
-                    </svg>
-                </div>
-            `;
+            card.className = "card loading";
+            card.innerHTML = `<div class="loader"><svg width="60" height="60"><circle cx="30" cy="30" r="20" fill="none" stroke-width="3" class="stroke-still"></circle><circle cx="30" cy="30" r="20" fill="none" stroke-width="3" class="stroke-animation"></circle></svg></div>`;
             groupDiv.appendChild(card);
 
-            // ÉTAPE 4 : Chargement des images en tâche de fond avec délai minimum forcé
             const img = new Image();
             const startTime = Date.now();
-            const minDelay = 500 + (index * 150); 
+            const minDelay = 500 + (index * 100);
 
             const revealCard = () => {
                 const elapsed = Date.now() - startTime;
@@ -128,26 +131,22 @@ function displayCategory(grouped) {
             };
 
             img.onload = revealCard;
-            img.onerror = revealCard; 
+            img.onerror = revealCard;
             img.src = getImageUrlFromPath(dish.image_path);
-            
-            if (img.complete) {
-                requestAnimationFrame(() => revealCard());
-            }
         });
         container.appendChild(groupDiv);
     });
 
-    window.scrollTo({ top: container.offsetTop - 80, behavior: 'smooth' });
+    // Lancement de l'animation des traits une fois les groupes créés
+    initShineAnimation();
+    window.scrollTo({ top: container.offsetTop - 50, behavior: 'smooth' });
 }
 
 function showDetail(dish) {
     const displayPrice = (dish.price === 0 || dish.price === "0") ? "Inclus" : `${dish.price} €`;
     let extraContent = "";
     if (dish.description?.trim()) extraContent += `<p style="margin-top:20px;">${dish.description}</p>`;
-    if (dish.ingredients?.trim()) {
-        extraContent += `<p style="font-size:0.9rem; opacity:0.8; font-style:italic; margin-top:15px; border-top: 1px solid #e0dbd0; padding-top:10px;">${dish.ingredients}</p>`;
-    }
+    if (dish.ingredients?.trim()) extraContent += `<p style="font-size:0.9rem; opacity:0.8; font-style:italic; margin-top:15px; border-top:1px solid #e0dbd0; padding-top:10px;">${dish.ingredients}</p>`;
 
     detail.innerHTML = `
         <div class="zoom-container" onclick="closeDetail()">
@@ -159,7 +158,6 @@ function showDetail(dish) {
             </div>
         </div>
     `;
-    
     detail.classList.add("active");
     detail.classList.remove("hidden");
     document.body.classList.add("overlay-open");
@@ -182,22 +180,13 @@ function closeMenuAnimation() {
 }
 
 backButton.onclick = () => {
-    if (detail.classList.contains("active")) {
-        closeDetail();
-    } else if (currentCategory) {
-        closeMenuAnimation();
-    }
+    if (detail.classList.contains("active")) closeDetail();
+    else if (currentCategory) closeMenuAnimation();
 };
 
 document.addEventListener("DOMContentLoaded", () => {
     const nav = document.getElementById("navigation");
-    const labels = { 
-        entree: "Entrées", 
-        plat: "Plats", 
-        accompagnement: "Accompagnements",
-        dessert: "Desserts", 
-        boisson: "Boissons" 
-    };
+    const labels = { entree: "Entrées", plat: "Plats", accompagnement: "Accompagnements", dessert: "Desserts", boisson: "Boissons" };
     Object.keys(labels).forEach(cat => {
         const btn = document.createElement("button");
         btn.textContent = labels[cat];
