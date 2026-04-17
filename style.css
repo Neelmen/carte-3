@@ -23,7 +23,7 @@ body {
     background-repeat: repeat;
     background-attachment: fixed;
     /* On garde la taille d'origine (500px) pour préserver la qualité */
-    background-size: 500px 500px;
+    background-size: 853px 1024px;
     /***********************************/
     color: #1a1a1a;
     padding: 20px 15px;
