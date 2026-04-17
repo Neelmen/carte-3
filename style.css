@@ -17,7 +17,14 @@ body {
     font-family: 'Tenor Sans', sans-serif;
     margin: 0;
     min-height: 100vh;
-    background-image: url("https://www.transparenttextures.com/patterns/gray-paper.png");
+    /********************************* image de fond*/
+    background-image: url("https://oaxpofkmtrudriyrbxvy.supabase.co/storage/v1/object/public/dishes-images/image_fond_bois.ico");
+    /* On force l'image à se répéter sur les deux axes */
+    background-repeat: repeat;
+    background-attachment: fixed;
+    /* On garde la taille d'origine (500px) pour préserver la qualité */
+    background-size: 500px 500px;
+    /***********************************/
     color: #1a1a1a;
     padding: 20px 15px;
     display: flex;
