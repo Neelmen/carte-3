@@ -178,12 +178,13 @@ function showDetail(dish) {
 
     // MISE À JOUR : Structure pour inclure le reflet dans le container
     detail.innerHTML = `
-        <div class="zoom-container" onclick="closeDetail()">
+<div class="zoom-container" onclick="closeDetail()">
             <img src="${getImageUrlFromPath(dish.image_path)}" class="zoom-image">
             <div class="zoom-info" onclick="event.stopPropagation()">
                 <h2>${dish.name}</h2>
                 <div style="font-size:1.5rem; color:#c06c4c; font-family:'Cormorant Garamond', serif;">${displayPrice}</div>
                 ${extraContent}
+                <div class="zoom-spacer" style="height: 100px;"></div>
             </div>
         </div>
     `;
@@ -223,10 +224,7 @@ backButton.onclick = () => {
     else if (currentCategory) closeMenuAnimation();
 };
 
-// Appel des fonctions
 document.addEventListener("DOMContentLoaded", () => {
-    generateBackgroundTicker();
-
     const nav = document.getElementById("navigation");
     const labels = { entree: "Entrées", plat: "Plats", accompagnement: "Accompagnements", dessert: "Desserts", boisson: "Boissons" };
     Object.keys(labels).forEach(cat => {
@@ -238,29 +236,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     updateBackButton();
 });
-// TEXTE DE FOND // EN DEV
-function generateBackgroundTicker() {
-    const container = document.getElementById("ticker-container");
-    if (!container) return;
-
-    container.innerHTML = "";
-
-    const gap = "\u00A0".repeat(2);
-    const messageWithGap = "Démonstration" + gap;
-
-    const lineCount = Math.ceil((window.innerHeight / 30) * 2.5);
-
-    for (let i = 0; i < lineCount; i++) {
-        const line = document.createElement("div");
-        line.className = "ticker-line";
-
-        const span = document.createElement("span");
-        span.textContent = messageWithGap.repeat(25);
-
-        line.appendChild(span);
-        container.appendChild(line);
-    }
-}
-
-// On relance si on tourne le téléphone pour recalculer la couverture
-window.addEventListener('resize', generateBackgroundTicker);
