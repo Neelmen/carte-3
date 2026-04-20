@@ -40,7 +40,7 @@ body {
     background-color: #fff;
     background-repeat: round;
     background-size: 20% 100%;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.7)), url("images/pattern_page.png");
+    background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url("images/pattern_page.png");
     width: min(750px, 100%);
     border-radius: 4px;
     padding: 60px 20px;
